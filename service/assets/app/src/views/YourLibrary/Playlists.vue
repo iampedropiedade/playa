@@ -1,5 +1,5 @@
 <template>
-  <div class="col-1-5 mb-3"  v-for="(playlist) in playlistsStore.playlists">
+  <div class="col-1-5 mb-3" v-for="(playlist) in playlistsStore.playlists">
     <router-link :to="{ name: 'Playlist', params: { id: playlist.id } }" class="link-light text-decoration-none  me-3 mb-3 w-100 h-100" v-if="playlist.id">
       <div class="cover" :style="getStyle(playlist)">
       </div>

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useSettingsStore } from './Settings'
 import ColorThief from 'colorthief'
+import Track from '../model/track'
 
 export const usePlaylistsStore = defineStore({
     id: 'playlists',
@@ -79,13 +80,54 @@ export const usePlaylistsStore = defineStore({
                 axios
                     .get(this.settingsStore.endpoints.spotify.playlists)
                     .then(response => {
+                        this.playlists = {}
                         let playlists = response.data.items
+                        playlists.sort((a, b) => a.name.localeCompare(b.name))
                         playlists.forEach((playlist) => {
                             if(playlist.id !== undefined) {
                                 this.playlists[playlist.id] = playlist
                             }
                         })
                         // this.setDominantColour()
+                        resolve()
+                    })
+                    .catch(errors => {
+                        reject(errors)
+                    })
+                    .finally(() => {
+                        this.loading = false
+                    })
+            })
+        },
+        async addTrackToPlaylist(playlistId, track) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .post(this.settingsStore.endpoints.spotify.playlists + '/' + playlistId + '/' + track.id)
+                    .then(response => {
+                        let trackObject = new Track(track)
+                        this.playlists[playlistId].tracks.items.push(trackObject)
+                        resolve()
+                    })
+                    .catch(errors => {
+                        reject(errors)
+                    })
+                    .finally(() => {
+                        this.loading = false
+                    })
+            })
+        },
+        async removeTrackFromCurrentPlaylist(track) {
+            return this.removeTrackFromPlaylist(this.currentPlaylist.id, track)
+        },
+        async removeTrackFromPlaylist(playlistId, track) {
+            console.log(track)
+            return new Promise((resolve, reject) => {
+                axios
+                    .delete(this.settingsStore.endpoints.spotify.playlists + '/' + playlistId + '/' + track.id)
+                    .then(response => {
+                        this.playlists[playlistId].tracks.items = this.playlists[playlistId].tracks.items.filter((item) => {
+                            return item.track.id !== track.id;
+                        });
                         resolve()
                     })
                     .catch(errors => {

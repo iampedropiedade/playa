@@ -38,14 +38,21 @@
           </button>
         </li>
         <li>
-          <button class="dropdown-item" v-on:click="">
+          <button class="dropdown-item" v-if="playlistsStore.currentPlaylist" v-on:click="removeFromCurrentPlaylist()">
             Remove from this playlist
           </button>
         </li>
         <li>
-          <button class="dropdown-item" v-on:click="">
-            Add to playlist
-          </button>
+          <div class="btn-group dropstart">
+            <button class="dropdown-item" v-on:click="" :id="'add-to-playlist-' + uid" data-bs-toggle="dropdown" aria-expanded="false">
+              Add to playlist
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark" :aria-labelledby="'add-to-playlist-' + uid">
+              <li v-for="(playlist) in playlistsStore.playlists">
+                <button class="dropdown-item" v-on:click="addToPlaylist(playlist.id)">{{ playlist.name }}</button>
+              </li>
+            </ul>
+          </div>
         </li>
         <li><hr class="dropdown-divider"></li>
         <li>
@@ -66,6 +73,7 @@
 <script>
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import {useSettingsStore} from "../../stores/Settings";
+import {usePlaylistsStore} from "../../stores/Playlists";
 import {useYourLibraryStore} from "../../stores/YourLibrary";
 import { v4 as uuid } from 'uuid';
 
@@ -80,6 +88,7 @@ export default {
   data() {
     return {
       settingsStore: useSettingsStore(),
+      playlistsStore: usePlaylistsStore(),
       yourLibraryStore: useYourLibraryStore(),
       uid: 'track-actions-dropdown-menu-button-' + uuid()
     }
@@ -87,6 +96,12 @@ export default {
   methods: {
     like() {
       this.yourLibraryStore.addToLibrary(this.track)
+    },
+    addToPlaylist(playlistId) {
+      this.playlistsStore.addTrackToPlaylist(playlistId, this.track)
+    },
+    removeFromCurrentPlaylist() {
+      this.playlistsStore.removeTrackFromCurrentPlaylist(this.track)
     },
   },
 }

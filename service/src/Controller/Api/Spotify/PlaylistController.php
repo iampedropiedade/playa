@@ -36,4 +36,44 @@ class PlaylistController extends AbstractSpotifyController
         }
         return new JsonResponse($result);
     }
+
+    #[Route('/{id}', name: 'api_spotify_playlist_delete', methods: ['DELETE'])]
+    public function delete(string $id): JsonResponse
+    {
+        $this->spotifyAuth->checkAuth();
+        try {
+            $result = $this->spotify->unfollowPlaylist($id);
+        }
+        catch(SpotifyWebAPIException $e) {
+            $result = $e->getMessage();
+        }
+        return new JsonResponse($result);
+    }
+
+    #[Route('/{id}/{trackId}', name: 'api_spotify_playlist_add_track', methods: ['POST'])]
+    public function addTrack(string $id, string $trackId): JsonResponse
+    {
+        $this->spotifyAuth->checkAuth();
+        try {
+            $result = $this->spotify->addPlaylistTracks($id, [$trackId]);
+        }
+        catch(SpotifyWebAPIException $e) {
+            $result = $e->getMessage();
+        }
+        return new JsonResponse($result);
+    }
+
+    #[Route('/{id}/{trackId}', name: 'api_spotify_playlist_delete_track', methods: ['DELETE'])]
+    public function removeTrack(string $id, string $trackId): JsonResponse
+    {
+        $this->spotifyAuth->checkAuth();
+        try {
+            $result = $this->spotify->deletePlaylistTracks($id, ['tracks' => [['uri' =>$trackId]]]);
+        }
+        catch(SpotifyWebAPIException $e) {
+            $result = $e->getMessage();
+        }
+        return new JsonResponse($result);
+    }
+
 }

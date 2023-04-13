@@ -1,0 +1,9 @@
+{% extends 'app/base.html.twig' %}
+{% block body %}
+    <playa
+        token="{{ token }}"
+        route="{{ route }}"
+        :token-duration="{{ tokenDuration }}"
+        spotify-endpoints="{{ spotifyEndpoints | json_encode }}"
+    />
+{% endblock %}

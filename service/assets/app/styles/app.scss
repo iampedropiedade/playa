@@ -1,0 +1,15 @@
+html {
+  overflow: hidden;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  overflow: auto;
+  font-family: "Figtree", sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  overflow-x: hidden;
+  font-size: .875rem;
+  overscroll-behavior: none;
+}

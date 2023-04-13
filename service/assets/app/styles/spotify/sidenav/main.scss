@@ -1,0 +1,9 @@
+@import "../../variables/elements.scss";
+
+.sidenav {
+  width: $sidenavWidth;
+  background: rgb(10, 10, 10);
+  height: calc(100vh - $playerHeight);
+  position: fixed;
+  overflow-y: scroll;
+}

@@ -1,0 +1,11 @@
+@import './main/main.scss';
+@import './playlist/main.scss';
+@import './player/main.scss';
+@import './profile/main.scss';
+@import './sidenav/main.scss';
+@import './your_library/main.scss';
+
+.spotify {
+  overflow-y: auto;
+  height: calc(100vh - $playerHeight);
+}

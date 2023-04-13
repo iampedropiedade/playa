@@ -1,0 +1,52 @@
+@import "../../variables/colors.scss";
+@import "../../variables/elements.scss";
+.player {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  &.row {
+    --bs-gutter-x: 0;
+  }
+  bottom: 0;
+  left: 0;
+  padding: 1.5rem;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+  height: $playerHeight;
+  background-color: #181818;
+  .playing {
+    min-width: 12rem;
+    .cover {
+      img {
+        width: 3rem;
+        height: 3rem;
+      }
+    }
+    .title {
+      margin-bottom: 0;
+      font-size: 1rem;
+    }
+    .artists {
+      color: $faded;
+      font-size: 0.7rem;
+    }
+  }
+  .controls {
+    .seek {
+      vertical-align: middle;
+      .current, .total {
+        font-size: 0.7rem;
+        color: $faded;
+        width: 4rem;
+      }
+    }
+  }
+  .settings {
+    min-width: 12rem;
+    .devices {
+      .title {
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+    }
+  }
+}

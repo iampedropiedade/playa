@@ -1,5 +1,5 @@
 <template>
-  <div class="pe-3 devices">
+  <div class="pe-3">
     <div class="btn-group dropup track">
       <button class="button" type="button" :id="uid" data-bs-toggle="dropdown" aria-expanded="false">
         <font-awesome-icon icon="fa-solid fa-ellipsis-vertical" />
@@ -12,8 +12,8 @@
         </li>
         <li><hr class="dropdown-divider"></li>
         <li>
-          <button class="dropdown-item" v-on:click="">
-            Go to song radio
+          <button class="dropdown-item" v-on:click="recommendations()">
+            View recommendations
           </button>
         </li>
         <li>
@@ -27,7 +27,7 @@
           </button>
         </li>
         <li>
-          <button class="dropdown-item" v-on:click="">
+          <button class="dropdown-item" v-on:click=""  data-bs-toggle="modal" :data-bs-target="'#credits-modal-' + uid">
             Show credits
           </button>
         </li>
@@ -68,6 +68,45 @@
         </li>
       </ul>
     </div>
+    <div class="modal fade" :id="'credits-modal-' + uid" tabindex="-1" :aria-labelledby="'credits-modal-label' + uid" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white p-4">
+          <div class="modal-header">
+            <h3 class="modal-title" :id="'credits-modal-label' + uid">{{ track.name }}</h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+              <font-awesome-icon :icon="['fas', 'xmark']" class="text-white fa-2xl" />
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-6">
+                <img class="img-fluid" :src="track.album?.images[0]?.url" :alt="track.name" />
+              </div>
+              <div class="col-6">
+                <h6 class="mb-2">Performed by</h6>
+                <div class="mb-4">
+                  <span v-for="(artist, index) in track.artists">
+                    {{ artist.name }}<span v-if="index+1 !== track.artists.length">, </span>
+                  </span>
+                </div>
+                <h6 class="mb-2">Album</h6>
+                <div class="mb-4">
+                  {{ track.album.name }}
+                </div>
+                <h6 class="mb-2">Released</h6>
+                <div class="mb-4">
+                  {{ $date(track.album.release_date).format('MMM D, YYYY') }}
+                </div>
+                <h6 class="mb-2">Popularity</h6>
+                <div class="mb-4">
+                  {{ track.popularity }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -75,6 +114,7 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import {useSettingsStore} from "../../stores/Settings";
 import {usePlaylistsStore} from "../../stores/Playlists";
 import {useYourLibraryStore} from "../../stores/YourLibrary";
+import {useRecommendationsStore} from "../../stores/Recommendations";
 import { v4 as uuid } from 'uuid';
 
 export default {
@@ -90,12 +130,17 @@ export default {
       settingsStore: useSettingsStore(),
       playlistsStore: usePlaylistsStore(),
       yourLibraryStore: useYourLibraryStore(),
-      uid: 'track-actions-dropdown-menu-button-' + uuid()
+      recommendationsStore: useRecommendationsStore(),
+      uid: 'track-actions-' + uuid()
     }
   },
   methods: {
     like() {
       this.yourLibraryStore.addToLibrary(this.track)
+    },
+    recommendations() {
+      console.log(this.track)
+      this.recommendationsStore.getRecommendationsForTrack(this.track)
     },
     addToPlaylist(playlistId) {
       this.playlistsStore.addTrackToPlaylist(playlistId, this.track)

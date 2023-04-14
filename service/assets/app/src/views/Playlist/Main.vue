@@ -2,10 +2,18 @@
   <div class="flex-grow-1">
     <div class="playlist align-items-stretch" v-if="playlistsStore.currentPlaylist">
       <div class="header">
-        <info />
+        <info
+            heading="Playlist"
+            :name="playlistsStore.currentPlaylist.name"
+            :description="playlistsStore.currentPlaylist.description"
+            :imageUrl="playlistsStore.currentPlaylist.images[0].url"
+            :owner="playlistsStore.currentPlaylist.owner"
+            :total-followers="playlistsStore.currentPlaylist.followers?.total"
+            :total-items="playlistsStore.currentPlaylist.tracks?.total"
+        />
       </div>
       <div class="list mt-4">
-        <list />
+        <list :track-list="playlistsStore.currentPlaylist.tracks.items" type="Playlist" />
       </div>
     </div>
   </div>
@@ -16,16 +24,16 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import {useSettingsStore} from "../../stores/Settings";
 import {usePlaylistsStore} from "../../stores/Playlists";
 import TopNav from '../TopNav/Main.vue';
-import List from './List.vue';
-import Info from './Info.vue';
+import List from '../TrackList/List.vue';
+import Info from '../TrackList/Info.vue';
 
 export default {
   name: 'Playlist',
   components: {
     FontAwesomeIcon,
     TopNav,
-    List,
-    Info
+    Info,
+    List
   },
   data() {
     return {

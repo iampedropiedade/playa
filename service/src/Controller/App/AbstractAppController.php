@@ -20,6 +20,7 @@ abstract class AbstractAppController extends AbstractController
     {
         return [
             'playlists' => $this->generateUrl('api_spotify_playlists'),
+            'recommendations' => $this->generateUrl('api_spotify_recommendations'),
             'yourLibrary' => $this->generateUrl('api_spotify_your_library'),
             'context' => $this->generateUrl('api_spotify_context'),
             'devices' => $this->generateUrl('api_spotify_devices'),

@@ -16,8 +16,8 @@
       <th scope="col"></th>
     </tr>
     </thead>
-    <tbody v-if="playlistsStore.currentPlaylist?.tracks">
-      <tr v-for="(track, index) in playlistsStore.currentPlaylist.tracks.items" class="track align-middle" :id="'playlist-track-id-' + track.track.id">
+    <tbody v-if="trackList?.length > 0">
+      <tr v-for="(track, index) in trackList" class="track align-middle" :id="'track-id-' + track.track.id">
         <th scope="row" class="small">
           {{ index + 1 }}
         </th>
@@ -39,7 +39,9 @@
           {{ $date(track.added_at).format('MMM D, YYYY') }}
         </td>
         <td class="small">
-          <font-awesome-icon :icon="['far', 'heart']" />
+          <button class="dropdown-item" v-on:click="this.yourLibraryStore.addToLibrary(track.track)">
+            <font-awesome-icon :icon="['far', 'heart']" />
+          </button>
         </td>
         <td class="small duration">
           {{ new Date(track.track.duration_ms).toISOString().slice(14, 19) }}
@@ -55,16 +57,23 @@
 <script>
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import {usePlaylistsStore} from "../../stores/Playlists";
-import Actions from '../Track/Actions.vue';
+import {useYourLibraryStore} from "../../stores/YourLibrary";
+
+import Actions from '../TrackList/Actions.vue';
 export default {
-  name: 'List',
+  name: 'TrackList',
   components: {
     FontAwesomeIcon,
     Actions
   },
+  props: {
+    trackList: {required: true},
+    type: {required: true, type: String},
+  },
   data() {
     return {
-      playlistsStore: usePlaylistsStore()
+      playlistsStore: usePlaylistsStore(),
+      yourLibraryStore: useYourLibraryStore(),
     }
   },
 }

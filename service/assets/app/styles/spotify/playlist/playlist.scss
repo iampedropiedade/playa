@@ -4,9 +4,14 @@
 .playlist {
   .header {
     .cover {
-      img {
+      span, img {
         width: 12rem;
         height: 12rem;
+      }
+      span {
+        display: block;
+        background: rgb(9,28,115);
+        background: linear-gradient(135deg, rgba(9,28,115,1) 0%, rgba(19,43,149,1) 25%, rgba(62,86,191,1) 75%, rgba(115,136,227,1) 100%);
       }
     }
     .details {

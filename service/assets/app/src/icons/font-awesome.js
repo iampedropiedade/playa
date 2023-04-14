@@ -16,10 +16,8 @@ import {
     faHeadphonesSimple, faHeart, faHouse, faLaptop,
     faLayerGroup, faMagnifyingGlass, faRepeat,
     faShuffle, faSquarePlus,
-    faTv,
-    faVolumeHigh,
-    faVolumeLow,
-    faVolumeOff
+    faTv, faVolumeHigh, faVolumeLow, faVolumeOff,
+    faXmark
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -30,5 +28,5 @@ library.add(
     faCalendarDays, faTv, faUser, faHearRegular,
     faDesktop, faHeadphonesSimple, faLaptop, faHouse,
     faMagnifyingGlass, faLayerGroup, faSquarePlus, faHeart,
-    faCircleChevronLeft, faCircleChevronRight, faEllipsisVertical
+    faCircleChevronLeft, faCircleChevronRight, faEllipsisVertical, faXmark
 )

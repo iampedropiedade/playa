@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useSettingsStore } from './Settings'
-import ColorThief from 'colorthief'
 import Track from '../model/track'
 
 export const usePlaylistsStore = defineStore({
@@ -22,23 +21,14 @@ export const usePlaylistsStore = defineStore({
             let sidenav = JSON.parse(localStorage.getItem(this.localStorageKey))
             this.sidenav = sidenav !== null ? sidenav : {}
         },
-        setDominantColour() {
-            const colorThief = new ColorThief();
-            const img = new Image();
-            img.addEventListener('load', () => {
-                let dominantColour = colorThief.getColor(img);
-                this.currentPlaylistHeaderStyle = 'background-image: linear-gradient(to bottom, rgba(' + dominantColour[0] + ', ' + dominantColour[1] + ', ' + dominantColour[2] + ', 1), transparent 20%)'
-            });
-            let imageURL = this.currentPlaylist?.images[0]?.url;
-            if(imageURL === undefined) {
-                return
-            }
-            let googleProxyURL = 'https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&refresh=2592000&url=';
-            img.crossOrigin = 'Anonymous';
-            img.src = googleProxyURL + encodeURIComponent(imageURL);
-        },
         async setPlaylist(id, data) {
             this.playlists[id] = data
+        },
+        async loadMore() {
+            if(this.currentPlaylist.tracks.items.length >= this.currentPlaylist.tracks.total) {
+                return
+            }
+            this.getPlaylistTracksFromApi(this.currentPlaylist.id, this.currentPlaylist.tracks.items.length)
         },
         async setActivePlaylist(id) {
             if(id === undefined) {
@@ -55,6 +45,33 @@ export const usePlaylistsStore = defineStore({
             }
             this.currentPlaylist = this.playlists[this.currentPlaylist.id]
         },
+        async getPlaylistTracksFromApi(id, offset = 0) {
+            console.log('Loading tracks from API')
+            console.log(offset)
+            return new Promise((resolve, reject) => {
+                this.loading = true
+                axios
+                    .get(this.settingsStore.endpoints.spotify.playlists + '/' + id + '/tracks/' + offset, {
+                        offset: offset
+                    })
+                    .then(response => {
+                        if(offset === 0) {
+                            this.currentPlaylist = response.data
+                        }
+                        else {
+                            this.currentPlaylist.tracks.items = [...this.currentPlaylist.tracks.items, ...response.data.items]
+                        }
+                        this.playlists[this.currentPlaylist.id] = this.currentPlaylist
+                        resolve()
+                    })
+                    .catch(errors => {
+                        reject(errors)
+                    })
+                    .finally(() => {
+                        this.loading = false
+                    })
+            })
+        },
         async getPlaylistFromApi(id) {
             return new Promise((resolve, reject) => {
                 this.loading = true
@@ -63,7 +80,6 @@ export const usePlaylistsStore = defineStore({
                     .then(response => {
                         this.currentPlaylist = response.data
                         this.playlists[this.currentPlaylist.id] = this.currentPlaylist
-                        // this.setDominantColour()
                         resolve()
                     })
                     .catch(errors => {
@@ -88,7 +104,6 @@ export const usePlaylistsStore = defineStore({
                                 this.playlists[playlist.id] = playlist
                             }
                         })
-                        // this.setDominantColour()
                         resolve()
                     })
                     .catch(errors => {

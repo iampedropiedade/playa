@@ -6,14 +6,14 @@
             heading="Playlist"
             :name="playlistsStore.currentPlaylist.name"
             :description="playlistsStore.currentPlaylist.description"
-            :imageUrl="playlistsStore.currentPlaylist.images[0].url"
+            :cover-images="playlistsStore.currentPlaylist.images"
             :owner="playlistsStore.currentPlaylist.owner"
             :total-followers="playlistsStore.currentPlaylist.followers?.total"
             :total-items="playlistsStore.currentPlaylist.tracks?.total"
         />
       </div>
       <div class="list mt-4">
-        <list :track-list="playlistsStore.currentPlaylist.tracks.items" type="Playlist" />
+        <list :track-list="playlistsStore.currentPlaylist.tracks.items" type="Playlist" :context-uri="playlistsStore.currentPlaylist.uri" />
       </div>
     </div>
   </div>
@@ -35,18 +35,29 @@ export default {
     Info,
     List
   },
+  props: {
+    loadMore: {required: true, type: Boolean},
+  },
   data() {
     return {
       settingsStore: useSettingsStore(),
       playlistsStore: usePlaylistsStore(),
+      id: null
+    }
+  },
+  watch: {
+    loadMore() {
+      this.playlistsStore.loadMore()
     }
   },
   beforeRouteUpdate(to) {
-    console.log('Route update')
-    console.log(to.params.id)
+    this.id = to.params.id
+    console.log('Playlist route update: ' + this.id)
     this.playlistsStore.setActivePlaylist(to.params.id)
   },
   mounted() {
+    this.id = this.$route.params.id
+    console.log('Playlist mounted: ' + this.id)
     this.playlistsStore.setActivePlaylist(this.$route.params.id)
   }
 }

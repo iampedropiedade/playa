@@ -13,7 +13,7 @@
         <li><hr class="dropdown-divider"></li>
         <li>
           <button class="dropdown-item" v-on:click="recommendations()">
-            View recommendations
+            View song recommendations
           </button>
         </li>
         <li>
@@ -22,7 +22,7 @@
           </button>
         </li>
         <li>
-          <button class="dropdown-item" v-on:click="">
+          <button class="dropdown-item" v-on:click="" v-if="track.album">
             Go to album
           </button>
         </li>
@@ -38,7 +38,7 @@
           </button>
         </li>
         <li>
-          <button class="dropdown-item" v-if="playlistsStore.currentPlaylist" v-on:click="removeFromCurrentPlaylist()">
+          <button class="dropdown-item" v-if="type === 'Playlist' && playlistsStore.currentPlaylist" v-on:click="removeFromCurrentPlaylist()">
             Remove from this playlist
           </button>
         </li>
@@ -89,13 +89,15 @@
                     {{ artist.name }}<span v-if="index+1 !== track.artists.length">, </span>
                   </span>
                 </div>
-                <h6 class="mb-2">Album</h6>
-                <div class="mb-4">
-                  {{ track.album.name }}
-                </div>
-                <h6 class="mb-2">Released</h6>
-                <div class="mb-4">
-                  {{ $date(track.album.release_date).format('MMM D, YYYY') }}
+                <div v-if="track.album">
+                  <h6 class="mb-2">Album</h6>
+                  <div class="mb-4">
+                    {{ track.album.name }}
+                  </div>
+                  <h6 class="mb-2">Released</h6>
+                  <div class="mb-4">
+                    {{ $date(track.album.release_date).format('MMM D, YYYY') }}
+                  </div>
                 </div>
                 <h6 class="mb-2">Popularity</h6>
                 <div class="mb-4">
@@ -124,6 +126,7 @@ export default {
   },
   props: {
     track: {required: true, type: Object},
+    type: {required: true, type: String},
   },
   data() {
     return {
@@ -139,8 +142,8 @@ export default {
       this.yourLibraryStore.addToLibrary(this.track)
     },
     recommendations() {
-      console.log(this.track)
-      this.recommendationsStore.getRecommendationsForTrack(this.track)
+      this.recommendationsStore.getRecommendationsForTrack(this.track.id)
+      this.$router.push({ name: 'Recommendations', params: { id: this.track.id } })
     },
     addToPlaylist(playlistId) {
       this.playlistsStore.addTrackToPlaylist(playlistId, this.track)

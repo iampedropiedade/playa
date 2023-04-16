@@ -9,7 +9,8 @@ export const useSettingsStore = defineStore({
         endpoints: [],
         devices: [],
         currentDevice: {},
-        profile: {}
+        profile: {},
+        playerId: null
     }),
     actions: {
         async getProfile() {

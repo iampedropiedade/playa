@@ -1,8 +1,8 @@
 <template>
-  <div class="spotify">
+  <div class="spotify" @scroll="onScroll" >
     <div class="d-flex">
       <sidenav />
-      <router />
+      <router :load-more="loadMore" />
     </div>
     <player />
   </div>
@@ -33,6 +33,7 @@ export default {
     return {
       settingsStore: useSettingsStore(),
       playlistsStore: usePlaylistsStore(),
+      loadMore: false,
     }
   },
   methods: {
@@ -43,6 +44,10 @@ export default {
       this.settingsStore.setTokenRefreshTimeout()
       this.playlistsStore.getPlaylistsFromApi();
       this.$router.push(this.route)
+    },
+    onScroll(e) {
+      const { scrollTop, offsetHeight, scrollHeight } = e.target
+      this.loadMore = (scrollTop + offsetHeight) >= scrollHeight
     }
   },
   created() {

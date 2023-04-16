@@ -8,7 +8,7 @@
         <top-nav />
       </div>
       <div class="routes p-4">
-        <router-view />
+        <router-view :load-more="loadMore" />
       </div>
     </div>
   </div>
@@ -27,11 +27,14 @@ export default {
     TopNav,
     Player
   },
+  props: {
+    loadMore: {required: true, type: Boolean},
+  },
   data() {
     return {
       settingsStore: useSettingsStore(),
       playlistsStore: usePlaylistsStore(),
     }
-  },
+  }
 }
 </script>

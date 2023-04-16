@@ -1,10 +1,26 @@
 @import "../../variables/colors.scss";
 
 .track {
+  font-size: 0.8rem;
   .small {
     width: 1px;
   }
-  font-size: 0.8rem;
+  .track-number {
+    width: 1rem;
+    .play {
+      display: none;
+      color: $light;
+    }
+  }
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    .index {
+      display: none;
+    }
+    .play {
+      display: block;
+    }
+  }
   .cover {
     img {
       width: 2.5rem;

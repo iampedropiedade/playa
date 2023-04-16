@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Api\Spotify;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use SpotifyWebAPI\SpotifyWebAPIException;
 
@@ -30,6 +31,19 @@ class PlaylistController extends AbstractSpotifyController
         $this->spotifyAuth->checkAuth();
         try {
             $result = $this->spotify->getPlaylist($id);
+        }
+        catch(SpotifyWebAPIException $e) {
+            $result = $e->getMessage();
+        }
+        return new JsonResponse($result);
+    }
+
+    #[Route('/{id}/tracks/{offset}', name: 'api_spotify_playlist_tracks', methods: ['GET'])]
+    public function tracks(string $id, int $offset = 0): JsonResponse
+    {
+        $this->spotifyAuth->checkAuth();
+        try {
+            $result = $this->spotify->getPlaylistTracks($id, ['limit' => 100, 'offset' => $offset]);
         }
         catch(SpotifyWebAPIException $e) {
             $result = $e->getMessage();

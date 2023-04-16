@@ -6,6 +6,8 @@ import Home from "../views/Home/Main.vue";
 import Search from "../views/Search/Main.vue";
 import LikedSongs from "../views/LikedSongs/Main.vue";
 import YourLibrary from "../views/YourLibrary/Main.vue";
+import Recommendations from "../views/Recommendations/Main.vue";
+import Album from "../views/Album/Main.vue";
 
 const routes = [
     {
@@ -29,17 +31,27 @@ const routes = [
         component: LikedSongs,
     },
     {
+        path: "/recommendations/track/:id",
+        name: "Recommendations",
+        component: Recommendations,
+    },
+    {
+        path: "/album/:id",
+        name: "Album",
+        component: Album,
+    },
+    {
         path: "/about",
         name: "About",
         component: About,
     },
     {
-        path: "/playlists/create",
+        path: "/playlist/create",
         name: "PlaylistCreate",
         component: PlaylistCreate,
     },
     {
-        path: "/playlists/:id",
+        path: "/playlist/:id",
         name: "Playlist",
         component: Playlist,
     },

@@ -19,12 +19,15 @@ abstract class AbstractAppController extends AbstractController
     public function getEndpoints(): array
     {
         return [
+            'player' => $this->generateUrl('api_spotify_player'),
+            'tracks' => $this->generateUrl('api_spotify_tracks'),
+            'queue' => $this->generateUrl('api_spotify_queue'),
+            'albums' => $this->generateUrl('api_spotify_albums'),
             'playlists' => $this->generateUrl('api_spotify_playlists'),
             'recommendations' => $this->generateUrl('api_spotify_recommendations'),
             'yourLibrary' => $this->generateUrl('api_spotify_your_library'),
             'context' => $this->generateUrl('api_spotify_context'),
             'devices' => $this->generateUrl('api_spotify_devices'),
-            'playbackState' => $this->generateUrl('api_spotify_player'),
             'refreshToken' => $this->generateUrl('api_spotify_auth_refresh_token'),
             'profile' => $this->generateUrl('api_spotify_profile'),
         ];

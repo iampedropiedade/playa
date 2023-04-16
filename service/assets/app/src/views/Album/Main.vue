@@ -1,17 +1,16 @@
 <template>
   <div class="flex-grow-1">
-    <div class="playlist align-items-stretch" v-if="yourLibraryStore.library">
+    <div class="playlist align-items-stretch" v-if="albumsStore.currentAlbum">
       <div class="header">
         <info
-            heading="Library"
-            name="Liked Songs"
-            :owner="settingsStore.profile"
-            :total-items="yourLibraryStore.library.total"
-            :cover-icon="['fas', 'heart']"
+            heading="Album"
+            :name="albumsStore.currentAlbum.name"
+            :total-items="albumsStore.currentAlbum.total_tracks"
+            :cover-images="albumsStore.currentAlbum.images"
         />
       </div>
       <div class="list mt-4">
-        <list :track-list="yourLibraryStore.library.items" type="LikedSongs" />
+        <list :track-list="albumsStore.currentAlbum.tracks?.items" type="Album" />
       </div>
     </div>
   </div>
@@ -20,13 +19,13 @@
 <script>
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import {useSettingsStore} from "../../stores/Settings";
-import {useYourLibraryStore} from "../../stores/YourLibrary";
+import {useAlbumsStore} from "../../stores/Albums";
 import TopNav from '../TopNav/Main.vue';
 import List from '../TrackList/List.vue';
 import Info from '../TrackList/Info.vue';
 
 export default {
-  name: 'Playlist',
+  name: 'Album',
   components: {
     FontAwesomeIcon,
     TopNav,
@@ -36,11 +35,13 @@ export default {
   data() {
     return {
       settingsStore: useSettingsStore(),
-      yourLibraryStore: useYourLibraryStore(),
+      albumsStore: useAlbumsStore(),
+      id: null,
     }
   },
   mounted() {
-    this.yourLibraryStore.getYourLibrary()
+    this.id = this.$route.params.id
+    this.albumsStore.getAlbum(this.id)
   }
 }
 </script>

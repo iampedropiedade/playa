@@ -10,6 +10,7 @@
             :owner="playlistsStore.currentPlaylist.owner"
             :total-followers="playlistsStore.currentPlaylist.followers?.total"
             :total-items="playlistsStore.currentPlaylist.tracks?.total"
+            :track-list="playlistsStore.currentPlaylist.tracks.items"
         />
       </div>
       <div class="list mt-4">
@@ -46,8 +47,10 @@ export default {
     }
   },
   watch: {
-    loadMore() {
-      this.playlistsStore.loadMore()
+    loadMore: function(newVal) {
+      if(newVal === true) {
+          this.playlistsStore.loadMore()
+      }
     }
   },
   beforeRouteUpdate(to) {

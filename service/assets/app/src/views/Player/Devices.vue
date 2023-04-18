@@ -5,17 +5,17 @@
         <font-awesome-icon icon="fa-solid fa-tv" />
       </button>
       <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" :aria-labelledby="uid" v-if="settingsStore.devices" >
-        <li>
+          <li><span class="dropdown-item-text title">Current device</span></li>
+          <li>
             <span class="dropdown-item-text">
-              <span class="title">Current device</span><br>
-              <font-awesome-icon :icon="getIcon(getActive())" class="pe-2" />
-              {{ getActive().name }}
+              <font-awesome-icon :icon="settingsStore.currentDevice?.icon" class="pe-2" v-if="settingsStore.currentDevice?.icon" />
+              {{ settingsStore.currentDevice?.name }}
             </span>
         </li>
         <li><span class="dropdown-item-text title">Select another device</span></li>
         <li v-for="device in settingsStore.devices" >
           <button class="dropdown-item" v-on:click="settingsStore.setDevice(device.id)">
-            <font-awesome-icon :icon="getIcon(device)" class="pe-2" />
+            <font-awesome-icon :icon="device.icon" class="pe-2"  v-if="device.icon" />
             {{ device.name }}
           </button>
         </li>
@@ -38,23 +38,6 @@ export default {
       settingsStore: useSettingsStore(),
       uid: 'dropdown-menu-button-' + uuid()
     }
-  },
-  methods: {
-    getActive() {
-      return this.settingsStore.devices.filter(function (device) {
-        return device.is_active === true;
-      })
-    },
-    getIcon(device) {
-      let icon = 'fa-solid '
-      if(device.type === 'Computer') {
-        return icon + 'fa-laptop'
-      }
-      if(device.type === 'Speaker') {
-        return icon + 'fa-headphones-simple'
-      }
-      return icon + 'fa-tv'
-    },
   },
 }
 </script>

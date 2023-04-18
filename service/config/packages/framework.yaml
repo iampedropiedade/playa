@@ -18,6 +18,14 @@ framework:
     php_errors:
         log: true
 
+    http_client:
+        scoped_clients:
+            spotify_downloader:
+                base_uri: '%env(SPOTIFY_DOWNLOADER_API_URL)%'
+                headers:
+                    'X-RapidAPI-Key': '%env(SPOTIFY_DOWNLOADER_API_KEY)%'
+                    'X-RapidAPI-Host': '%env(SPOTIFY_DOWNLOADER_HOST)%'
+
 when@test:
     framework:
         test: true

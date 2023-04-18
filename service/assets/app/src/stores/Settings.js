@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import {usePlayerStore} from "./Player";
 
 export const useSettingsStore = defineStore({
     id: 'settings',
@@ -10,7 +11,8 @@ export const useSettingsStore = defineStore({
         devices: [],
         currentDevice: {},
         profile: {},
-        playerId: null
+        playerId: null,
+        playerStore: usePlayerStore(),
     }),
     actions: {
         async getProfile() {
@@ -33,7 +35,14 @@ export const useSettingsStore = defineStore({
                 axios
                     .get(this.endpoints.spotify.devices)
                     .then(response => {
-                        this.devices = response.data.devices
+                        let devices = response.data.devices
+                        devices.forEach((device) => {
+                            device = this.setIcon(device)
+                            this.devices.push(device)
+                        })
+                        this.currentDevice = this.devices.find(function (device) {
+                            return device.is_active === true;
+                        })
                         resolve()
                     })
                     .catch(errors => {
@@ -43,11 +52,25 @@ export const useSettingsStore = defineStore({
                     })
             })
         },
+        setIcon(device) {
+            device.icon = 'fa-solid '
+            if(device.type === 'Computer') {
+                device.icon += 'fa-laptop'
+            }
+            else if(device.type === 'Speaker') {
+                device.icon += 'fa-headphones-simple'
+            }
+            else {
+                device.icon += 'fa-tv'
+            }
+            return device
+        },
         async setDevice(id) {
             return new Promise((resolve, reject) => {
                 axios
                     .post(this.endpoints.spotify.devices + '/' + id)
                     .then(response => {
+                        this.playerStore.player.activateElement()
                         resolve()
                     })
                     .catch(errors => {

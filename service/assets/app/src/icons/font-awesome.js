@@ -1,7 +1,7 @@
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {
     faClock, faUser, faHeart as faHearRegular,
-    faQuestionCircle,
+    faQuestionCircle, faCircleDown
 } from "@fortawesome/free-regular-svg-icons";
 import {
     faBackwardStep,
@@ -29,5 +29,5 @@ library.add(
     faDesktop, faHeadphonesSimple, faLaptop, faHouse,
     faMagnifyingGlass, faLayerGroup, faSquarePlus, faHeart,
     faCircleChevronLeft, faCircleChevronRight, faEllipsisVertical, faXmark,
-    faThumbsUp, faPlay
+    faThumbsUp, faPlay, faCircleDown
 )

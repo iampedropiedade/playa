@@ -37,21 +37,32 @@ export const usePlayerStore = defineStore({
                     this.settingsStore.getDevices()
                     this.player.getVolume().then(volume => {
                         this.volume = Math.round(volume * 100)
-                    });
-                    this.player.activateElement()
+                    })
                     console.log(this.player)
                 });
                 this.player.addListener("player_state_changed", state => {
                     this.state = state
                     this.currentTrack = state.track_window.current_track
-                });
+                })
                 this.player.addListener("progress", progress => {
                     this.$patch({ progress: progress.position })
                     this.relativeProgress = this.state?.duration === 0 ? 0 : Math.round(this.progress / this.state?.duration * 1000)
-                });
+                })
                 this.player.addListener('ready', ({ device_id }) => {
                     this.settingsStore.playerId = device_id
-                });
+                })
+                this.player.addListener('not_ready', ({ device_id }) => {
+                    console.log('Device ID has gone offline', device_id);
+                })
+                this.player.addListener('initialization_error', ({ message }) => {
+                    console.log(message);
+                })
+                this.player.addListener('authentication_error', ({ message }) => {
+                    console.log(message);
+                })
+                this.player.addListener('account_error', ({ message }) => {
+                    console.log(message);
+                })
             };
         },
         async playbackState() {

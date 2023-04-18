@@ -66,6 +66,11 @@
             Open in Desktop app
           </button>
         </li>
+        <li>
+            <button class="dropdown-item" v-on:click="tracksStore.downloadTrack(track, index+1)">
+                Download as mp3
+            </button>
+        </li>
       </ul>
     </div>
     <div class="modal fade" :id="'credits-modal-' + uid" tabindex="-1" :aria-labelledby="'credits-modal-label' + uid" aria-hidden="true">
@@ -118,6 +123,7 @@ import {usePlaylistsStore} from "../../stores/Playlists";
 import {useYourLibraryStore} from "../../stores/YourLibrary";
 import {useRecommendationsStore} from "../../stores/Recommendations";
 import { v4 as uuid } from 'uuid';
+import {useTracksStore} from "../../stores/Tracks";
 
 export default {
   name: 'Actions',
@@ -126,6 +132,7 @@ export default {
   },
   props: {
     track: {required: true, type: Object},
+    index: {required: true, type: Number},
     type: {required: true, type: String},
   },
   data() {
@@ -134,6 +141,7 @@ export default {
       playlistsStore: usePlaylistsStore(),
       yourLibraryStore: useYourLibraryStore(),
       recommendationsStore: useRecommendationsStore(),
+      tracksStore: useTracksStore(),
       uid: 'track-actions-' + uuid()
     }
   },

@@ -47,7 +47,7 @@ export default {
     },
     onScroll(e) {
       const { scrollTop, offsetHeight, scrollHeight } = e.target
-      this.loadMore = (scrollTop + offsetHeight) >= scrollHeight
+      this.loadMore = (scrollTop + offsetHeight) + 200 >= scrollHeight
     }
   },
   created() {

@@ -1,6 +1,6 @@
 <template>
-  <tr class="track align-middle" :id="'track-id-' + track.id" v-on:click="play($event)" role="button">
-    <th scope="row" class="small track-number">
+  <tr class="track align-middle" :id="'track-id-' + track.id" role="button">
+    <th scope="row" class="small track-number" v-on:click="play($event)" >
       <span class="index">
         {{ index + 1 }}
       </span>
@@ -8,10 +8,10 @@
         <font-awesome-icon :icon="['fas', 'play']" />
       </span>
     </th>
-    <td class="small cover" v-if="track.album">
+    <td class="small cover" v-if="track.album" v-on:click="play($event)" >
       <img :src="track.album?.images[0].url"/>
     </td>
-    <td>
+    <td v-on:click="play($event)" >
       <h5 class="title">
         {{ track.name }}
       </h5>
@@ -19,24 +19,24 @@
         {{ artist.name }}<span v-if="index+1 !== track.artists.length">, </span>
       </span>
     </td>
-    <td class="album" v-if="track.album">
+    <td class="album" v-if="track.album" v-on:click="play($event)" >
       <button v-on:click="viewAlbum()" class="btn btn-sm btn-link text-light-20 text-decoration-none">{{ track.album?.name }}</button>
     </td>
-    <td class="date-added">
+    <td class="date-added" v-on:click="play($event)" >
       <span v-if="addedAt">
         {{ $date(addedAt).format('MMM D, YYYY') }}
       </span>
     </td>
-    <td class="small">
+    <td class="small" v-on:click="play($event)" >
       <button class="dropdown-item" v-on:click="this.yourLibraryStore.addToLibrary(track)">
         <font-awesome-icon :icon="['far', 'heart']" />
       </button>
     </td>
-    <td class="small duration">
+    <td class="small duration" v-on:click="play($event)" >
       {{ new Date(track.duration_ms).toISOString().slice(14, 19) }}
     </td>
-    <td class="small" @click.prevent>
-      <actions :track="track" :type="type" />
+    <td class="small">
+      <actions :track="track" :type="type" :index="index" />
     </td>
   </tr>
 </template>
@@ -81,12 +81,9 @@ export default {
       this.$router.push({ name: 'Album', params: { id: this.track.album.id } })
     },
     play(event) {
-      console.log('Trying to play ' + this.track.id + ' in context ' + this.contextUri)
       if(event.target.getAttribute('data-bs-toggle') === 'dropdown') {
         return
       }
-      console.log(event.target)
-      console.log('Past the thing')
       if(this.type === 'Recommendations') {
         this.playerStore.playTracks(this.recommendationsStore.currentRecommendations.tracks)
       }
